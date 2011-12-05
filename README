@@ -1,0 +1,9 @@
+WebSec Toolbox Chrome Extension
+
+This is a work-in-progress Chrome Extension that adds a right-click context menu to any text boxes, text areas, or input boxes within a web page. Upon clicking the menu, several options are presented, allowing the user to select XSS or mySQL injections to insert into the text box. Upon submitting the form, the user can see if Cross-Site Scripting or mySQL injection vulnerabilities exist on the site.
+
+WARNING:
+I am not responsible for how you use this tool. It is designed for testing web applications that you own. Do not use this tool to attack other sites. All of the code used in this tool can be found through a quick Google search; I have just compiled it for easier use.
+
+Copyright:
+This tool was designed by Matthew Fuller (http://matthewdfuller.com). It is open-source, free to use, modify, redistribute, etc. If you want to add some credits back to me, that would be nice.
